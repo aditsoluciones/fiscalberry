@@ -6,21 +6,34 @@ import logging
 from FiscalPrinterDriver import PrinterException
 import ctypes
 from ctypes import byref, c_int, c_char, c_char_p, c_long, c_short, create_string_buffer
+
 import requests
 import platform
 import os
-
-
+from ctypes import windll
 archbits = platform.architecture()[0]
+sowin = platform._syscmd_ver()[1]
 newpath  = os.path.dirname(os.path.realpath(__file__))
-if archbits[0:2] == "64":
-	fullpath = "/lib64/libEpsonFiscalInterface.so"
+
+if sowin == "Windows":
+	if archbits[0:2] == "64":
+		fullpath = "./epsonlib/win/64/EpsonFiscalInterface.dll"	
+		EpsonLibInterface= windll.LoadLibrary(fullpath)
+	else:
+		fullpath = "./epsonlib/win/32/EpsonFiscalInterface.dll"
+		EpsonLibInterface= windll.LoadLibrary(fullpath)
 else:
-	fullpath = "/lib/libEpsonFiscalInterface.so"
+	if archbits[0:2] == "64":
+		fullpath = "./epsonlib/lin/64/libEpsonFiscalInterface.so"
+		EpsonLibInterface = ctypes.cdll.LoadLibrary(fullpath)
+	else:
+		fullpath = "./epsonlib/lin/32/libEpsonFiscalInterface.so"
+		EpsonLibInterface = ctypes.cdll.LoadLibrary(fullpath)
 
-EpsonLibInterface = ctypes.cdll.LoadLibrary(fullpath)
-
-
+# if sowin == "Windows":
+# 	EpsonLibInterface= windll.LoadLibrary(fullpath)
+# else:
+# 	EpsonLibInterface = ctypes.cdll.LoadLibrary(fullpath)
 class Epson2GenDriver(DriverInterface):
 
 	__name__ = "Epson2GenDriver"
@@ -43,20 +56,21 @@ class Epson2GenDriver(DriverInterface):
 	#	“lan:192.168.1.1” – Http ip 192.168.1.1
 	#	“lan:192.168.1.1:443” – Http ip 192.168.1.1 puerto 443
 	#
-	def __init__(self, path='serial: /dev/usb/lp0', baudrate=9600):
-		print "-"*25
-		print "*"*25
-		print "   EPSON FISCAL"
-		print "*"*25
-		print "-"*25
+	def __init__(self, path='serial: /dev/usb/lp0', baudrate=115200):
+		# print "-"*25
+		# print "*"*25
+		# print "   EPSON FISCAL GEN 2"
+		# print "*"*25
+		# print "-"*25
 
 		self.port = path
-		self.baudrate = baudrate
+		self.baudrate = int(baudrate)
 		self.EpsonLibInterface = EpsonLibInterface
-
 
 	def start(self):
 		"""Inicia recurso de conexion con impresora"""
+		# self.EpsonLibInterface.dll_version()/
+
 		self.EpsonLibInterface.ConfigurarVelocidad( c_int(self.baudrate).value )
 		self.EpsonLibInterface.ConfigurarPuerto( self.port )
 		self.EpsonLibInterface.Conectar()
@@ -68,24 +82,24 @@ class Epson2GenDriver(DriverInterface):
 		int_minor = c_int()
 
 		error = self.EpsonLibInterface.ConsultarVersionEquipo( str_version, c_int(str_version_max_len).value, byref(int_major), byref(int_minor) )
-		print "Machinne Version        : ",
-		print error
-		print "String Machinne Version : ",
-		print str_version.value
-		print "Major Machinne Version  : ",
-		print int_major.value
-		print "Minor Machine Version   : ",
-		print int_minor.value
+		# print "Machinne Version        : ",
+		# print error
+		# print "String Machinne Version : ",
+		# print str_version.value
+		# print "Major Machinne Version  : ",
+		# print int_major.value
+		# print "Minor Machine Version   : ",
+		# print int_minor.value
 
 
 		# status
 		error = self.EpsonLibInterface.ConsultarEstadoDeConexion()
-		print "Conexion Status         : ",
-		print error
+		# print "Conexion Status         : ",
+		# print error
 
-		error = self.EpsonLibInterface.ComenzarLog()
-		print "Log iniciado Status         : ",
-		print error
+		# error = self.EpsonLibInterface.ComenzarLog()
+		# print "Log iniciado Status         : ",
+		# print error
 
 		logging.getLogger().info("Conectada la Epson 2Gen al puerto  : %s" % (self.port) )
 
@@ -94,8 +108,8 @@ class Epson2GenDriver(DriverInterface):
 
 		# get last error
 		error = self.EpsonLibInterface.ConsultarUltimoError()
-		print "Last Error            : ",
-		print error
+		# print "Last Error            : ",
+		# print error
 
 		
 		self.EpsonLibInterface.Desconectar();

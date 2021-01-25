@@ -314,12 +314,23 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		self.start()
 		self.cancelDocument()
 
-		retLenght = 28
-  		ret = create_string_buffer( b'\000' * retLenght )
-		self.conector.driver.EpsonLibInterface.ConsultarNumeroComprobanteUltimo(ret, retLenght)
+		# retLenght = 20
+  		# ret = create_string_buffer( b'\000' * retLenght )
+		# self.conector.driver.EpsonLibInterface.ConsultarNumeroComprobanteActual(ret, c_int(retLenght).value)
+
+		str_doc_number_max_len = 28
+		str_doc_number = create_string_buffer( b'\000' * str_doc_number_max_len )
+		test = self.conector.driver.EpsonLibInterface.ConsultarNumeroComprobanteActual(str_doc_number, c_int(str_doc_number_max_len).value)
+		logging.info('-------------------')
+		logging.info('-------------------')
+		logging.info('-------------------')
+		logging.info(test)
+		logging.info('-------------------')
+		logging.info('-------------------')
+		logging.info('-------------------')
 
 		self.close()
-		return ret
+		return str_doc_number
 
 	def getLastCreditNoteNumber(self, letter):
 		"""Obtiene el último número de FC"""

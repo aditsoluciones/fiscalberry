@@ -58,6 +58,13 @@ class TraductorFiscal(TraductorInterface):
         self.comando.start()
         letra_cbte = tipo_cbte[-1] if len(tipo_cbte) > 1 else None
         ret = self.comando.getLastNumber(letra_cbte)
+        print('----------------------')
+        print('----------------------')
+        print('----------------------')
+        print(ret)
+        print('----------------------')
+        print('----------------------')
+        print('----------------------')
         self.comando.close()
         return ret
 
