@@ -14,7 +14,6 @@ from ctypes import windll
 archbits = platform.architecture()[0]
 sowin = platform._syscmd_ver()[1]
 newpath  = os.path.dirname(os.path.realpath(__file__))
-
 if sowin == "Windows":
 	if archbits[0:2] == "64":
 		fullpath = "./epsonlib/win/64/EpsonFiscalInterface.dll"	
@@ -29,11 +28,6 @@ else:
 	else:
 		fullpath = "./epsonlib/lin/32/libEpsonFiscalInterface.so"
 		EpsonLibInterface = ctypes.cdll.LoadLibrary(fullpath)
-
-# if sowin == "Windows":
-# 	EpsonLibInterface= windll.LoadLibrary(fullpath)
-# else:
-# 	EpsonLibInterface = ctypes.cdll.LoadLibrary(fullpath)
 class Epson2GenDriver(DriverInterface):
 
 	__name__ = "Epson2GenDriver"
@@ -42,7 +36,6 @@ class Epson2GenDriver(DriverInterface):
 	fiscalStatusErrors = []
 
 	printerStatusErrors = []
-
 
 	#
 	#	path disponibles
@@ -70,7 +63,6 @@ class Epson2GenDriver(DriverInterface):
 	def start(self):
 		"""Inicia recurso de conexion con impresora"""
 		# self.EpsonLibInterface.dll_version()/
-
 		self.EpsonLibInterface.ConfigurarVelocidad( c_int(self.baudrate).value )
 		self.EpsonLibInterface.ConfigurarPuerto( self.port )
 		self.EpsonLibInterface.Conectar()
@@ -105,14 +97,13 @@ class Epson2GenDriver(DriverInterface):
 
 	def close(self):
 		"""Cierra recurso de conexion con impresora"""
-
 		# get last error
 		error = self.EpsonLibInterface.ConsultarUltimoError()
 		# print "Last Error            : ",
 		# print error
 
 		
-		self.EpsonLibInterface.Desconectar();
+		self.EpsonLibInterface.Desconectar()
 		logging.getLogger().info("DESConectada la Epson 2Gen al puerto: %s" % (self.port) )
 
 	def ObtenerEstadoFiscal(self):

@@ -10,7 +10,6 @@ class TraductorInterface:
         rta = []
         for action in actions:
             fnAction = getattr(self, action)
-
             if isinstance(jsonTicket[action], list):
                 res = fnAction(*jsonTicket[action])
                 rta.append({"action": action, "rta": res})
@@ -18,10 +17,8 @@ class TraductorInterface:
             elif isinstance(jsonTicket[action], dict):
                 res = fnAction(**jsonTicket[action])
                 rta.append({"action": action, "rta": res})
-
             else:
                 res = fnAction(jsonTicket[action])
                 rta.append({"action": action, "rta": res})
-
         # vuelvo a poner la impresora que estaba por default inicializada
         return rta

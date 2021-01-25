@@ -132,7 +132,7 @@ class Epson2GenComandos(ComandoFiscalInterface):
 	def cancelDocument(self):
 		"""Cancela el documento que esté abierto"""
 		self.conector.driver.EpsonLibInterface.Cancelar()
-		
+
 	def imprimirAuditoria(self, desde, hasta):
 		#desde & Hasta = Nros de Zeta o fechas, ambos pueden ser usados como intervalos de tiempo.
 		self.conector.driver.ImprimirAuditoria(desde, hasta)
@@ -311,26 +311,27 @@ class Epson2GenComandos(ComandoFiscalInterface):
 
 	def getLastNumber(self, letter):
 		"""Obtiene el último número de FC"""
-		self.start()
-		self.cancelDocument()
-
+		# self.start()
+		# self.cancelDocument()
 		# retLenght = 20
   		# ret = create_string_buffer( b'\000' * retLenght )
 		# self.conector.driver.EpsonLibInterface.ConsultarNumeroComprobanteActual(ret, c_int(retLenght).value)
-
+		if letter == 'T':
+			letter = '83'
+		elif letter == 'FA':
+			letter = '81'
+		elif letter == 'FB':
+			letter = '82'
+		elif letter == 'C':
+			letter = '111'
+		else:
+			letter = '83'
 		str_doc_number_max_len = 28
 		str_doc_number = create_string_buffer( b'\000' * str_doc_number_max_len )
-		test = self.conector.driver.EpsonLibInterface.ConsultarNumeroComprobanteActual(str_doc_number, c_int(str_doc_number_max_len).value)
-		logging.info('-------------------')
-		logging.info('-------------------')
-		logging.info('-------------------')
-		logging.info(test)
-		logging.info('-------------------')
-		logging.info('-------------------')
-		logging.info('-------------------')
+		test = self.conector.driver.EpsonLibInterface.ConsultarNumeroComprobanteUltimo(letter, str_doc_number, c_int(str_doc_number_max_len).value)
 
-		self.close()
-		return str_doc_number
+		# self.close()
+		return str_doc_number.value
 
 	def getLastCreditNoteNumber(self, letter):
 		"""Obtiene el último número de FC"""
@@ -345,17 +346,17 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		return self.cancelDocument()
 
 	def dailyClose(self, type):
-		self.start()
+		# self.start()
 
-		self.cancelDocument()
-		
+		# self.cancelDocument()
+		print 'imprimiendo'
 
 		if type == 'Z':
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreZ()
 		else:
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreX()
 
-		self.close()
+		# self.close()
 
 		return ret
 

@@ -10,7 +10,7 @@ import nmap
 import os
 import git
 from multiprocessing import Process, Queue, Pool
-
+import serviciotraductor
 import sys
 if sys.platform == 'win32':
     import multiprocessing.reduction    # make sockets pickable/inheritable
@@ -20,7 +20,6 @@ INTERVALO_IMPRESORA_WARNING = 30.0
 import logging
 
 logger = logging.getLogger(__name__)
-
 
 def set_interval(func, sec):
     def func_wrapper():
@@ -59,20 +58,21 @@ def init_printer_traductor(printerName):
     comando = comandoClass(**dictSectionConf)
     return comando.traductor
 
+
+
 def runTraductor(jsonTicket, queue):
-    logging.info("mandando comando de impresora")
-    
     printerName = jsonTicket.pop('printerName')
-
-    traductor = init_printer_traductor(printerName)
-
+    if serviciotraductor.exist(printerName):
+        traductor = serviciotraductor.getimpresora(printerName)
+    else:
+        serviciotraductor.addimpresora(printerName,init_printer_traductor(printerName))
+        traductor = serviciotraductor.getimpresora(printerName)
     if traductor:
         if traductor.comando.conector is not None:
-            queue.put(traductor.run(jsonTicket))
-            traductor.comando.close()
+            return traductor.run(jsonTicket)
         else:
             strError = "el Driver no esta inicializado para la impresora %s" % printerName
-            queue.put(strError)
+            return strError
             logging.error(strError)
 
 
@@ -83,16 +83,12 @@ class TraductoresHandler:
 
     traductores = {}
     fbApp = None
-
     config = Configberry.Configberry()
     webSocket = None
 
     def __init__(self, webSocket = None, fbApp = None):
         self.webSocket = webSocket
         self.fbApp = fbApp
-
-
-
 
     def json_to_comando(self, jsonTicket):
         import time        
@@ -107,17 +103,19 @@ class TraductoresHandler:
             # seleccionar impresora
             # esto se debe ejecutar antes que cualquier otro comando
             if 'printerName' in jsonTicket:
-                # run multiprocessing
                 q = Queue()
-                p = Process(target=runTraductor, args=(jsonTicket,q))
-                p.daemon = True
-                #p = MultiprocesingTraductor(traductorhandler=self, jsonTicket=jsonTicket, q=q)
-                p.start()
-                p.join()
-                if q.empty() == False:
-                    rta["rta"] = q.get(timeout=1)
-                q.close()
-
+                rta["rta"] = runTraductor(jsonTicket,q)
+                # print rta
+                # q = Queue()
+                # p = Process(target=runTraductor, args=(jsonTicket,q))
+                # p.daemon = True                
+                # p.start()
+                # p.join()
+                # if q.empty() == False:
+                #     rta["rta"] = q.get(timeout=1)
+                # else:
+                #     print q
+                # q.close()
             # aciones de comando genericos de Ststus y control
             elif 'getStatus' in jsonTicket:
                 rta["rta"] = self._getStatus()

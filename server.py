@@ -5,8 +5,7 @@ from multiprocessing import freeze_support
 import argparse
 
 from FiscalberryApp import FiscalberryApp
-
-
+import serviciotraductor
 def init_server():
 	
 	fbserver = FiscalberryApp()
