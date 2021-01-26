@@ -68,6 +68,56 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		21 : 5
 	}
 
+	def runcommand(self, commando, *args):
+		arg = None
+		if args and args[0] != None and len(args[0]):
+			arg = args[0].split(",")
+		if arg == None:
+			ret = self.conector.driver.EpsonLibInterface[commando]()
+		elif len(arg)==1:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0])
+		elif len(arg)==2:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1])
+		elif len(arg)==3:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2])
+		elif len(arg)==4:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3])
+		elif len(arg)==5:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4])
+		elif len(arg)==6:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5])
+		elif len(arg)==7:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6])
+		elif len(arg)==8:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7])
+		elif len(arg)==9:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7],arg[8])
+		elif len(arg)==10:
+			ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7],arg[8],arg[9])
+		else:
+			ret = None
+		return ret
+	
+	def getcommand(self, commando, *args):
+		arg = None
+		if args and args[0] != None and len(args[0]):
+			arg = args[0].split(",")
+		str_doc_number_max_len = int(arg[0])
+		str_doc_number = create_string_buffer( b'\000' * str_doc_number_max_len )
+		print '---------------'
+		print '---------------'
+		print arg
+		# print args[0]
+		print '---------------'
+		print '---------------'
+		if arg == None:
+			test = self.conector.driver.EpsonLibInterface[commando](str_doc_number, c_int(str_doc_number_max_len).value)
+		elif len(arg)==1:
+			test = self.conector.driver.EpsonLibInterface[commando](args, str_doc_number, c_int(str_doc_number_max_len).value)
+		
+		return str_doc_number.value
+
+
 	def getStatus(self, *args):
 		return {self.conector.driver.ObtenerEstadoFiscal()}
 
@@ -349,13 +399,12 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		# self.start()
 
 		# self.cancelDocument()
-		print 'imprimiendo'
 
 		if type == 'Z':
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreZ()
 		else:
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreX()
-
+		print ret
 		# self.close()
 
 		return ret

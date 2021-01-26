@@ -73,7 +73,7 @@ class Epson2GenDriver(DriverInterface):
 		int_major = c_int()
 		int_minor = c_int()
 
-		error = self.EpsonLibInterface.ConsultarVersionEquipo( str_version, c_int(str_version_max_len).value, byref(int_major), byref(int_minor) )
+		# error = self.EpsonLibInterface.ConsultarVersionEquipo( str_version, c_int(str_version_max_len).value, byref(int_major), byref(int_minor) )
 		# print "Machinne Version        : ",
 		# print error
 		# print "String Machinne Version : ",
@@ -85,7 +85,7 @@ class Epson2GenDriver(DriverInterface):
 
 
 		# status
-		error = self.EpsonLibInterface.ConsultarEstadoDeConexion()
+		# error = self.EpsonLibInterface.ConsultarEstadoDeConexion()
 		# print "Conexion Status         : ",
 		# print error
 
