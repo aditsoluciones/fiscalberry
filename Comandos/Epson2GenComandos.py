@@ -151,29 +151,22 @@ class Epson2GenComandos(ComandoFiscalInterface):
 	def getState(self):
 		data = self.conector.driver.EpsonLibInterface.getState()
 		return data
-	
+
 	def getLastError(self):
 		data = self.conector.driver.EpsonLibInterface.getLastError()
 		return data
-
 	def getFiscalStatus(self):
 		data = self.conector.driver.EpsonLibInterface.getFiscalStatus()
 		return data
-
 	def getPrinterStatus(self):
 		data = self.conector.driver.EpsonLibInterface.getPrinterStatus()
-		return data
-
+		return data	
 	def getReturnCode(self):
 		data = self.conector.driver.EpsonLibInterface.getReturnCode()
 		return data
-
-
-
 	def getComPort(self):
 		data = self.conector.driver.EpsonLibInterface.getComPort()
 		return data
-
 	def getBaudRate(self):
 		data = self.conector.driver.EpsonLibInterface.getBaudRate()
 		return data
@@ -299,6 +292,9 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		line=1
 		while line <= len(headerlist):
 			texto = c_char_p(headerlist[line-1]).value
+			print '------------'
+			print texto
+			print '------------'
 			self.conector.driver.EpsonLibInterface.EstablecerEncabezado(line, texto)
 			line+=1
 			pass
@@ -389,6 +385,8 @@ class Epson2GenComandos(ComandoFiscalInterface):
 			@param description  Descripción
 			@param payment      Importe
 		"""
+		print 200,8,1,str(payment),'None',description
+		ret = self.conector.driver.EpsonLibInterface.CargarPago(200,8,1,str(payment),'None',description,"asd","ga")
 		pass
 
 		#self.conector.sendCommand( jdata )
@@ -518,7 +516,7 @@ class Epson2GenComandos(ComandoFiscalInterface):
 			@param negative     Si negative = True, se añadira el monto como descuento, sino, sera un recargo
 		"""
 		ivaid = self.ivaPercentageIds.get(iva)
-		self.conector.driver.cargarAjuste(description, amount, ivaid, negative)
+		self.conector.driver.EpsonLibInterface.CargarAjuste(c_int( 400 ).value,description, str(amount),  c_int(ivaid).value, "asdads")
 		
 
 	def setCodigoBarras(self, numero , tipoCodigo = "CodigoTipoI2OF5", imprimeNumero =  "ImprimeNumerosCodigo" ):
@@ -566,6 +564,17 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		"""Este comando no esta disponible en la 2da generación de impresoras, es necesaria su declaración por el uso del TraductorFiscal """
 		return self.cancelDocument()
 
+	def CargarLogo(self, path):
+		"""Este comando no esta disponible en la 2da generación de impresoras, es necesaria su declaración por el uso del TraductorFiscal """
+		print path
+		ret = self.conector.driver.EpsonLibInterface.CargarLogo(path)
+		return ret
+
+	def EliminarLogo(self):
+		"""Este comando no esta disponible en la 2da generación de impresoras, es necesaria su declaración por el uso del TraductorFiscal """
+		ret = self.conector.driver.EpsonLibInterface.EliminarLogo()
+		return ret
+
 	def dailyClose(self, type):
 		# self.start()
 
@@ -579,7 +588,13 @@ class Epson2GenComandos(ComandoFiscalInterface):
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreZ()
 		else:
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreX()
+		print '--------------'
+		print '--------------'
+		print '--------------'
 		print ret
+		print '--------------'
+		print '--------------'
+		print '--------------'
 		# self.close()
 
 		return ret

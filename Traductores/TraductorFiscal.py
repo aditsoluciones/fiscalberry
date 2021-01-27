@@ -32,7 +32,18 @@ class TraductorFiscal(TraductorInterface):
         self.comando.close()
         return ret
 
-        
+    def CargarLogo(self, path):
+        self.comando.start()
+        ret = self.comando.CargarLogo(path)
+        self.comando.close()
+        return ret
+    
+    def EliminarLogo(self, *args):
+        self.comando.start()
+        ret = self.comando.EliminarLogo()
+        self.comando.close()
+        return ret
+
     def ConsultarVersionDll(self, *args):
         self.comando.start()
         ret = self.comando.ConsultarVersionDll()
@@ -123,9 +134,6 @@ class TraductorFiscal(TraductorInterface):
         self.comando.start()
         ret = self.comando.dailyClose(type)
         self.comando.close()
-        print '------------ret dialyclose'
-        print ret
-        print '------------'
         return ret
 
     def imprimirAuditoria(self, desde, hasta):
@@ -187,7 +195,7 @@ class TraductorFiscal(TraductorInterface):
 
         if setTrailer:
             self.setTrailer(*setTrailer)
-        
+
         self.comando.start()
         try:
 
@@ -289,6 +297,7 @@ class TraductorFiscal(TraductorInterface):
                                     itemNegative, float(discount), discountDescription, discountNegative)
 
     def _imprimirPago(self, ds, importe):
+        print ds, importe
         "Imprime una linea con la forma de pago y monto"
         self.factura["pagos"].append(dict(ds=ds, importe=importe))
         return self.comando.addPayment(ds, float(importe))

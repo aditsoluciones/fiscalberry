@@ -59,13 +59,8 @@ class Epson2GenDriver(DriverInterface):
 		
 	# Ambos sistemas operativos
 		# 'usb:usb' #solo 1 usb
-		# self.port = 'usb:EPSONN1234' # serial number, para tener mas de una impresora
-		# "lan:192.168.1.1"
-		# "lan:192.168.1.1:443"
-		# "lan:192.168.1.1:8443,ssl" #aunque no tengas el ssl habilitado
-		
-		
-		# self.port = "lan:192.168.1.1:443"
+		# self.port = 'usb:EPSONN1234' # serial number, para tener mas de una impresora - probar q no le encontre la vuelta
+		# self.port = "lan:192.168.1.1" #andandooo
 		self.port = path
 		self.baudrate = int(baudrate)
 		self.EpsonLibInterface = EpsonLibInterface
@@ -160,6 +155,7 @@ class Epson2GenDriver(DriverInterface):
 		id_modificador = 400
 		if negative:
 			id_modificador = 401
+		
 		return self.EpsonLibInterface.CargarAjuste(id_modificador, description, str(amount), ivaid, "")
 
 	def ImprimirItem(self, id_modificador, description, qty, precio, id_tasa_iva, ii_id = 0, ii_valor = "0.0", id_codigo = 1, codigo= "1", codigo_unidad_matrix = "1", codigo_unidad_medida = 7):
