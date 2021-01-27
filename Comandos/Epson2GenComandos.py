@@ -99,24 +99,195 @@ class Epson2GenComandos(ComandoFiscalInterface):
 		return ret
 	
 	def getcommand(self, commando, *args):
-		arg = None
-		if args and args[0] != None and len(args[0]):
-			arg = args[0].split(",")
-		str_doc_number_max_len = int(arg[0])
-		str_doc_number = create_string_buffer( b'\000' * str_doc_number_max_len )
-		print '---------------'
-		print '---------------'
-		print arg
-		# print args[0]
-		print '---------------'
-		print '---------------'
-		if arg == None:
-			test = self.conector.driver.EpsonLibInterface[commando](str_doc_number, c_int(str_doc_number_max_len).value)
-		elif len(arg)==1:
-			test = self.conector.driver.EpsonLibInterface[commando](args, str_doc_number, c_int(str_doc_number_max_len).value)
-		
-		return str_doc_number.value
+		str_version_max_len = 500
+		str_version = create_string_buffer( b'\000' * str_version_max_len )
+		int_major = c_int()
+		int_minor = c_int()
+		error = self.conector.driver.EpsonLibInterface.ConsultarVersionDll( str_version, c_int(str_version_max_len).value, byref(int_major), byref(int_minor) )
+		print "Machinne Version        : ",
+		print error
+		print "String Machinne Version : ",
+		print str_version.value
+		print "Major Machinne Version  : ",
+		print int_major.value
+		print "Minor Machine Version   : ",
+		print int_minor.value
+		return {
+			"Machinne Version":error,
+			"String Machinne Version": str_version.value,
+			"Major Machinne Version": int_major.value,
+			"Minor Machine Version": int_minor.value		
+			}
 
+
+		
+		# if arg == None:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando]()
+		# elif len(arg)==1:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0])
+		# elif len(arg)==2:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1])
+		# elif len(arg)==3:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2])
+		# elif len(arg)==4:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3])
+		# elif len(arg)==5:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4])
+		# elif len(arg)==6:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5])
+		# elif len(arg)==7:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6])
+		# elif len(arg)==8:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7])
+		# elif len(arg)==9:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7],arg[8])
+		# elif len(arg)==10:
+		# 	ret = self.conector.driver.EpsonLibInterface[commando](arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7],arg[8],arg[9])
+		# else:
+		# 	ret = None
+		# return ret
+
+
+	def getState(self):
+		data = self.conector.driver.EpsonLibInterface.getState()
+		return data
+	
+	def getLastError(self):
+		data = self.conector.driver.EpsonLibInterface.getLastError()
+		return data
+
+	def getFiscalStatus(self):
+		data = self.conector.driver.EpsonLibInterface.getFiscalStatus()
+		return data
+
+	def getPrinterStatus(self):
+		data = self.conector.driver.EpsonLibInterface.getPrinterStatus()
+		return data
+
+	def getReturnCode(self):
+		data = self.conector.driver.EpsonLibInterface.getReturnCode()
+		return data
+
+
+
+	def getComPort(self):
+		data = self.conector.driver.EpsonLibInterface.getComPort()
+		return data
+
+	def getBaudRate(self):
+		data = self.conector.driver.EpsonLibInterface.getBaudRate()
+		return data
+	def getProtocolType(self):
+		data = self.conector.driver.EpsonLibInterface.getProtocolType()
+		return data
+	def GetHTTPStatusCode(self):
+		data = self.conector.driver.EpsonLibInterface.GetHTTPStatusCode()
+		return data
+	def SetSSLInsecureMode(self):
+		data = self.conector.driver.EpsonLibInterface.SetSSLInsecureMode()
+		return data
+	def GetTimeOut(self):
+		data = self.conector.driver.EpsonLibInterface.GetTimeOut()
+		return data
+	def GetResponseHeadersCount(self):
+		data = self.conector.driver.EpsonLibInterface.GetResponseHeadersCount()
+		return data
+	def getExtraFieldCount(self):
+		data = self.conector.driver.EpsonLibInterface.getRegetExtraFieldCountturnCode()
+		return data
+	def ComenzarLog(self):
+		data = self.conector.driver.EpsonLibInterface.ComenzarLog()
+		return data
+	def ConsultarEstadoDeConexion(self):
+		data = self.conector.driver.EpsonLibInterface.ConsultarEstadoDeConexion()
+		return data
+
+
+
+
+
+
+	def ConsultarVersionDll(self):
+		str_version_max_len = 500
+		str_version = create_string_buffer( b'\000' * str_version_max_len )
+		int_major = c_int()
+		int_minor = c_int()
+		error = self.conector.driver.EpsonLibInterface.ConsultarVersionDll( str_version, c_int(str_version_max_len).value, byref(int_major), byref(int_minor) )
+		return {
+			"Machinne Version":error,
+			"String Machinne Version": str_version.value,
+			"Major Machinne Version": int_major.value,
+			"Minor Machine Version": int_minor.value		
+			}
+		
+
+#   # get document number
+#   str_doc_number_max_len = 20
+#   str_doc_number = create_string_buffer( b'\000' * str_doc_number_max_len )
+#   error = Handle_HL.ConsultarNumeroComprobanteActual( str_doc_number, c_int(str_doc_number_max_len).value )
+#   print "Get Doc. Number Error : ",
+#   print error
+#   print "Doc Number            : ",
+#   print str_doc_number.value
+
+
+
+#   str_version_max_len = 500
+#   str_version = create_string_buffer( b'\000' * str_version_max_len )
+#   int_major = c_int()
+#   int_minor = c_int()
+#   error = Handle_HL.ConsultarVersionDll( str_version, c_int(str_version_max_len).value, byref(int_major), byref(int_minor) )
+#   print "Machinne Version        : ",
+#   print error
+#   print "String Machinne Version : ",
+#   print str_version.value
+#   print "Major Machinne Version  : ",
+#   print int_major.value
+#   print "Minor Machine Version   : ",
+#   print int_minor.value
+
+
+
+#   # get header #1
+#   str_header1_max_len = 100
+#   str_header1 = create_string_buffer( b'\000' * str_header1_max_len )
+#   error = Handle_HL.ConsultarEncabezado( c_int(1).value, str_header1, c_int(str_header1_max_len).value )
+#   print "Get Header Error      : ",
+#   print error
+#   print "Header #1 String      : ",
+#   print str_header1.value
+
+
+#   # get trailer #1
+#   str_trailer1_max_len = 100
+#   str_trailer1 = create_string_buffer( b'\000' * str_trailer1_max_len )
+#   error = Handle_HL.ConsultarCola( c_int(1).value, str_trailer1, c_int(str_trailer1_max_len).value )
+#   print "Get Trailer Error     : ",
+#   print error
+#   print "Trailer #1 String     : ",
+#   print str_trailer1.value
+
+
+#   # get datetime
+#   str_datetime_max_len = 100
+#   str_datetime = create_string_buffer( b'\000' * str_datetime_max_len )
+#   error = Handle_HL.ConsultarFechaHora( str_datetime, c_int(str_datetime_max_len).value )
+#   print "Get Date & Time Error : ",
+#   print error
+#   print "Date & Time           : ",
+#   print str_datetime.value
+
+
+
+#   # get subtotal gross amount
+#   str_subtotal_max_len = 20
+#   str_subtotal = create_string_buffer( b'\000' * str_subtotal_max_len )
+#   error = Handle_HL.ConsultarSubTotalBrutoComprobanteActual( str_subtotal, c_int(str_subtotal_max_len).value )
+#   print "Get Subtotal Gross    : ",
+#   print error
+#   print "Subtotal Gross Amount : ",
+#   print str_subtotal.value
+  
 
 	def getStatus(self, *args):
 		return {self.conector.driver.ObtenerEstadoFiscal()}
@@ -398,7 +569,11 @@ class Epson2GenComandos(ComandoFiscalInterface):
 	def dailyClose(self, type):
 		# self.start()
 
-		# self.cancelDocument()
+		# ver si conviene o no dejar alguna de estas opciones
+		# alenta un poco mas el cierre x o Z
+		# pero permitiria que ande siempre siempre, por si algo quedo trabado antes
+		# self.cancel()
+		# self.cancelAnyDocument()
 
 		if type == 'Z':
 			ret = self.conector.driver.EpsonLibInterface.ImprimirCierreZ()

@@ -56,6 +56,16 @@ class Epson2GenDriver(DriverInterface):
 		# print "*"*25
 		# print "-"*25
 
+		
+	# Ambos sistemas operativos
+		# 'usb:usb' #solo 1 usb
+		# self.port = 'usb:EPSONN1234' # serial number, para tener mas de una impresora
+		# "lan:192.168.1.1"
+		# "lan:192.168.1.1:443"
+		# "lan:192.168.1.1:8443,ssl" #aunque no tengas el ssl habilitado
+		
+		
+		# self.port = "lan:192.168.1.1:443"
 		self.port = path
 		self.baudrate = int(baudrate)
 		self.EpsonLibInterface = EpsonLibInterface

@@ -32,6 +32,90 @@ class TraductorFiscal(TraductorInterface):
         self.comando.close()
         return ret
 
+        
+    def ConsultarVersionDll(self, *args):
+        self.comando.start()
+        ret = self.comando.ConsultarVersionDll()
+        self.comando.close()
+        return ret
+    def getState(self, *args):
+        self.comando.start()
+        ret = self.comando.getState()
+        self.comando.close()
+        return ret
+    def getLastError(self, *args):
+        self.comando.start()
+        ret = self.comando.getLastError()
+        self.comando.close()
+        return ret
+    def getFiscalStatus(self, *args):
+        self.comando.start()
+        ret = self.comando.getFiscalStatus()
+        self.comando.close()
+        return ret
+    def getPrinterStatus(self, *args):
+        self.comando.start()
+        ret = self.comando.getPrinterStatus()
+        self.comando.close()
+        return ret
+    def getReturnCode(self, *args):
+        self.comando.start()
+        ret = self.comando.getReturnCode()
+        self.comando.close()
+        return ret
+    def getComPort(self, *args):
+        self.comando.start()
+        ret = self.comando.getComPort()
+        self.comando.close()
+        return ret
+    def getBaudRate(self, *args):
+        self.comando.start()
+        ret = self.comando.getBaudRate()
+        self.comando.close()
+        return ret
+    def getProtocolType(self, *args):
+        self.comando.start()
+        ret = self.comando.getProtocolType()
+        self.comando.close()
+        return ret    
+    def GetHTTPStatusCode(self, *args):
+        self.comando.start()
+        ret = self.comando.GetHTTPStatusCode()
+        self.comando.close()
+        return ret
+    def SetSSLInsecureMode(self, *args):
+        self.comando.start()
+        ret = self.comando.SetSSLInsecureMode()
+        self.comando.close()
+        return ret
+    def GetTimeOut(self, *args):
+        self.comando.start()
+        ret = self.comando.GetTimeOut()
+        self.comando.close()
+        return ret
+    def GetResponseHeadersCount(self, *args):
+        self.comando.start()
+        ret = self.comando.GetResponseHeadersCount()
+        self.comando.close()
+        return ret
+    def getExtraFieldCount(self, *args):
+        self.comando.start()
+        ret = self.comando.getExtraFieldCount()
+        self.comando.close()
+        return ret
+    def ComenzarLog(self, *args):
+        self.comando.start()
+        ret = self.comando.ComenzarLog()
+        self.comando.close()
+        return ret
+    def ConsultarEstadoDeConexion(self, *args):
+        self.comando.start()
+        ret = self.comando.ConsultarEstadoDeConexion()
+        self.comando.close()
+        return ret
+
+        
+
     def dailyClose(self, type):
         "Comando X o Z"
         # cancelar y volver a un estado conocido
