@@ -10,13 +10,13 @@ from ctypes import byref, c_int, c_char, c_char_p, c_long, c_short, create_strin
 import requests
 import platform
 import os
-from ctypes import windll
 archbits = platform.architecture()[0]
 sowin = platform._syscmd_ver()[1]
 newpath  = os.path.dirname(os.path.realpath(__file__))
 if sowin == "Windows":
+	from ctypes import windll
 	if archbits[0:2] == "64":
-		fullpath = "./epsonlib/win/64/EpsonFiscalInterface.dll"	
+		fullpath = "./epsonlib/win/64/EpsonFiscalInterface.dll"
 		EpsonLibInterface= windll.LoadLibrary(fullpath)
 	else:
 		fullpath = "./epsonlib/win/32/EpsonFiscalInterface.dll"
@@ -56,7 +56,7 @@ class Epson2GenDriver(DriverInterface):
 		# print "*"*25
 		# print "-"*25
 
-		
+
 	# Ambos sistemas operativos
 		# 'usb:usb' #solo 1 usb
 		# self.port = 'usb:EPSONN1234' # serial number, para tener mas de una impresora - probar q no le encontre la vuelta
@@ -72,7 +72,7 @@ class Epson2GenDriver(DriverInterface):
 		self.EpsonLibInterface.ConfigurarPuerto( self.port )
 		self.EpsonLibInterface.Conectar()
 
-		
+
 		str_version_max_len = 500
 		str_version = create_string_buffer( b'\000' * str_version_max_len )
 		int_major = c_int()
@@ -107,7 +107,7 @@ class Epson2GenDriver(DriverInterface):
 		# print "Last Error            : ",
 		# print error
 
-		
+
 		self.EpsonLibInterface.Desconectar()
 		logging.getLogger().info("DESConectada la Epson 2Gen al puerto: %s" % (self.port) )
 
@@ -123,25 +123,25 @@ class Epson2GenDriver(DriverInterface):
 		id_modificador 		integer
 		• 500 – Auditoría detallada.
 		• 501 – Auditoría resumida.
-		
+
 		Número o fecha del cierre Z inicial.
 		desde string
 		• Formato para número de Cierre Z: “9999”
 		• Formato para fecha: “ddmmyy”
-		
+
 		Número o fecha del cierre Z final. (inclusive)
 		hasta string
 		• Formato para número de Cierre Z: “9999”
 		• Formato para fecha: “ddmmyy”
 
 		"""
-    
+
 		return self.EpsonLibInterface.ImprimirAuditoria( id_modificador, desde, hasta )
 
 	def cargarAjuste(self, description, amount, ivaid, negative):
 		"""
-		Integer CargarAjuste( 
-			Integer id_modificador, 
+		Integer CargarAjuste(
+			Integer id_modificador,
 				• 400 – Descuento.
 				• 401 – Ajuste.
 				• 402 – Ajuste negativo.
@@ -155,20 +155,20 @@ class Epson2GenDriver(DriverInterface):
 		id_modificador = 400
 		if negative:
 			id_modificador = 401
-		
+
 		return self.EpsonLibInterface.CargarAjuste(id_modificador, description, str(amount), ivaid, "")
 
 	def ImprimirItem(self, id_modificador, description, qty, precio, id_tasa_iva, ii_id = 0, ii_valor = "0.0", id_codigo = 1, codigo= "1", codigo_unidad_matrix = "1", codigo_unidad_medida = 7):
-		"""Integer ImprimirItem( 
-				Integer id_modificador, 
+		"""Integer ImprimirItem(
+				Integer id_modificador,
 				String descripcion,
-				String cantidad, 
-				String precio, 
+				String cantidad,
+				String precio,
 				Integer id_tasa_iva,
-				Integer ii_id, 
+				Integer ii_id,
 				String ii_valor, header
 				Integer id_codigo,
-				String codigo, 
+				String codigo,
 				String codigo_unidad_matrix,
 				Integer codigo_unidad_medida )
 		"""
